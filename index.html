@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Punta Cana Hair Transplant</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #0b141a; color: #e9edef; padding: 24px;
+  }
+  .card { text-align: center; max-width: 420px; width: 100%; }
+  .logo {
+    width: 72px; height: 72px; border-radius: 18px; margin: 0 auto 20px;
+    background: #25d366; display: flex; align-items: center; justify-content: center;
+  }
+  .logo svg { width: 42px; height: 42px; fill: #fff; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  p { color: #8696a0; margin: 0 0 24px; font-size: 15px; }
+  .btn {
+    display: inline-block; background: #25d366; color: #fff; text-decoration: none;
+    padding: 14px 28px; border-radius: 999px; font-weight: 600; font-size: 16px;
+  }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid #1f2c34; border-top-color: #25d366;
+    border-radius: 50%; margin: 0 auto 20px; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-1.043z"/></svg>
+    </div>
+    <div class="spinner" id="spinner"></div>
+    <h1 id="ttl">Punta Cana Hair Transplant</h1>
+    <p id="sub">Redirecting you to WhatsApp...</p>
+    <a class="btn hidden" id="manual" href="#">Open WhatsApp</a>
+  </div>
+
+<script>
+  // Kaynak-i-hakikat: Supabase wa_sites (slug bazli). Asagidakiler yalniz YEDEK.
+  var SLUG = "puntacana-wa-eribert";
+  var REST = "https://zmdbafqjtqlenleocukz.supabase.co/rest/v1";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InptZGJhZnFqdHFsZW5sZW9jdWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzA0NDMsImV4cCI6MjA5MzA0NjQ0M30.bVUMLSwi37WlltqdZYVIkpIJUHgXnECYvSaj3C4iQtE";
+  var FB_AGENTS = [{"phone": "905064565376", "weight": 1}];       // yedek numara listesi
+  var FB_MSG = "Hello, I would like to get some information about hair transplants in Punta Cana.";         // yedek mesaj
+  var FB_MODE = "round-robin";           // yedek mod
+  var FB_TITLE = "Punta Cana Hair Transplant";    // yedek baslik
+  var NOAGENT = "No agent configured yet.";
+
+  function applyTitle(t) {
+    if (!t) return;
+    document.getElementById("ttl").textContent = t;
+    document.title = t;
+  }
+
+  function pickWeighted(list) {
+    var total = 0, i;
+    for (i = 0; i < list.length; i++) total += (list[i].weight || 1);
+    var r = Math.random() * total;
+    for (i = 0; i < list.length; i++) { r -= (list[i].weight || 1); if (r <= 0) return list[i]; }
+    return list[list.length - 1];
+  }
+  function localPick(agents, mode) {
+    if (mode === "weighted") return pickWeighted(agents);
+    return agents[Math.floor(Math.random() * agents.length)];
+  }
+  function toAgents(nums) {
+    return (nums || []).map(function (n) {
+      return { phone: String(n).replace(/\D/g, ""), weight: 1 };
+    }).filter(function (a) { return a.phone; });
+  }
+  function redirect(agent, msg) {
+    var url = "https://wa.me/" + agent.phone + (msg ? "?text=" + encodeURIComponent(msg) : "");
+    var btn = document.getElementById("manual");
+    btn.href = url;
+    setTimeout(function () {
+      document.getElementById("spinner").classList.add("hidden");
+      btn.classList.remove("hidden");
+    }, 1500);
+    window.location.replace(url);
+  }
+  function noAgents() {
+    document.getElementById("spinner").classList.add("hidden");
+    document.getElementById("sub").textContent = NOAGENT;
+  }
+
+  var done = false;
+  function finish(agents, msg, mode, counter) {
+    if (done) return; done = true;
+    if (!agents.length) { noAgents(); return; }
+    if (mode === "round-robin" && agents.length > 1 && counter != null && !isNaN(counter)) {
+      var i = ((counter % agents.length) + agents.length) % agents.length;
+      redirect(agents[i], msg);
+    } else {
+      redirect(mode === "round-robin" ? agents[0] : localPick(agents, mode), msg);
+    }
+  }
+
+  var ctrl = ("AbortController" in window) ? new AbortController() : null;
+  var sig = ctrl ? ctrl.signal : undefined;
+  var timer = setTimeout(function () {
+    if (ctrl) ctrl.abort();
+    finish(FB_AGENTS, FB_MSG, FB_MODE, null);   // DB yavas -> yedekle git
+  }, 2500);
+
+  var pConf = fetch(REST + "/wa_sites?slug=eq." + encodeURIComponent(SLUG) +
+                    "&select=numbers,message,mode,title",
+      { headers: { apikey: KEY, Authorization: "Bearer " + KEY }, signal: sig })
+    .then(function (r) { return r.json(); })
+    .then(function (rows) {
+      var c = rows && rows[0];
+      if (!c) return { agents: FB_AGENTS, msg: FB_MSG, mode: FB_MODE, title: FB_TITLE };
+      var a = toAgents(c.numbers);
+      return { agents: a.length ? a : FB_AGENTS,
+               msg: (c.message != null) ? c.message : FB_MSG,
+               mode: c.mode || FB_MODE,
+               title: (c.title != null) ? c.title : FB_TITLE };
+    })
+    .catch(function () { return { agents: FB_AGENTS, msg: FB_MSG, mode: FB_MODE, title: FB_TITLE }; });
+
+  var pCount = fetch(REST + "/rpc/wa_next", { method: "POST",
+      headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_site: location.host + location.pathname }), signal: sig })
+    .then(function (r) { return r.json(); })
+    .then(function (n) { return parseInt(n, 10); })
+    .catch(function () { return null; });
+
+  Promise.all([pConf, pCount]).then(function (res) {
+    clearTimeout(timer);
+    applyTitle(res[0].title);
+    finish(res[0].agents, res[0].msg, res[0].mode, res[1]);
+  });
+</script>
+</body>
+</html>
